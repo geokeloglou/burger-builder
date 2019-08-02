@@ -1,5 +1,7 @@
 import axios from 'axios';
 import * as actionTypes from './actionTypes';
+import API_KEY from '../../firebase_keys/firebase.json';
+
 
 export const authStart = () => {
   return {
@@ -30,9 +32,10 @@ export const auth = (email, password, isSignup) => {
       password: password,
       returnSecureToken: true
     };
-    let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD2UzYBH8cz27tD5jB4NqJIyVX3ThJXmfE';
+    const KEY = API_KEY["WEB_API_KEY"];
+    let url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${KEY}`;
     if (!isSignup) {
-      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD2UzYBH8cz27tD5jB4NqJIyVX3ThJXmfE';
+      url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${KEY}`;
     }
     axios.post(url, authData)
       .then(response => {
@@ -41,6 +44,7 @@ export const auth = (email, password, isSignup) => {
       })
       .catch(err => {
         console.log(err);
+        console.log(KEY);
         dispatch(authFail(err));
       });
   };
